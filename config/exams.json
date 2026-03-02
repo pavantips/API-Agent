@@ -1,0 +1,23 @@
+{
+  "exams": [
+    {
+      "exam_id": "DemoCertID",
+      "description": "Demo Exam",
+      "duration": 120,
+      "exam_url": "https://fourthexample.com",
+      "exam_password": "LINE25TABLE",
+      "instructor": "nice Instructor",
+      "active_date": "2025-10-06T01:01:00",
+      "end_date": "9999-12-31T23:59:00",
+      "modality": "vendor_interface",
+      "vendor": "proctoru"
+    },
+    {
+      "exam_id": "AdHocCertID",
+      "description": "AdHoc Demo Exam",
+      "duration": 120,
+      "modality": "direct_booking",
+      "vendor": "proctoru"
+    }
+  ]
+}
