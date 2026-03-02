@@ -9,6 +9,7 @@ from utils import (
     display_slots,
     prompt_slot_selection
 )
+from store import save_reservation
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -62,6 +63,16 @@ def vendor_interface_flow(user: dict, exam: dict):
     if launch_url:
         print(f"\n✓ Launch URL ready: {launch_url}")
         print("  → User clicks this link to schedule on ProctorU's site.")
+
+        # Persist to store — no reservation_no yet (user picks slot on ProctorU's site)
+        save_reservation({
+            "student_id":       user["student_id"],
+            "exam_id":          exam["exam_id"],
+            "exam_description": exam["description"],
+            "modality":         "vendor_interface",
+            "launch_url":       launch_url,
+            "status":           "booked"
+        })
     else:
         print("\n⚠ No launch URL found — check the saved response file for the full payload.")
 
@@ -170,6 +181,19 @@ def direct_booking_flow(user: dict, exam: dict, preferred_datetime: str):
             print(f"  Manage Appt URL  : {management_url}")
         print(f"  ─────────────────────────────────────────")
         print(f"\n  → Keep the Reservation No ({reservation_no}) — needed to cancel or reschedule.")
+
+        # Persist to store — full record including ProctorU's reservation_no
+        save_reservation({
+            "student_id":       user["student_id"],
+            "exam_id":          exam["exam_id"],
+            "exam_description": exam["description"],
+            "modality":         "direct_booking",
+            "reservation_id":   reservation_id,     # Our UUID
+            "reservation_no":   reservation_no,     # ProctorU's ID (for cancel/reschedule)
+            "booked_slot":      booking_result["booked_slot"],
+            "management_url":   management_url,
+            "status":           "booked"
+        })
     else:
         print(f"\n✗ Booking failed (HTTP {booking_result['status_code']}).")
         print("  Check the saved response file for details.")

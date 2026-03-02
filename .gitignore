@@ -1,4 +1,5 @@
 .env
 responses/
+data/
 __pycache__/
 *.pyc
