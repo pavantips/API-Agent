@@ -134,7 +134,7 @@ def run_chatbot():
         "first_name":    "Jane",
         "last_name":     "Does",
         "email":         "indijones12@yopmail.com",
-        "user_password": "9ea342d9e48b",
+        "user_password": "9ea342D9e48b",            # Must have uppercase + lowercase + digit
         "time_zone_id":  "America/Chicago",
 
         # Address fields — will come from CMS user profile in Phase 5

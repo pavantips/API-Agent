@@ -41,19 +41,29 @@ def vendor_interface_flow(user: dict, exam: dict):
     print("\n─── Vendor Interface Flow Result ─────────────────────────")
     print(json.dumps(result, indent=2))
 
-    # Extract launch URL — exact key TBD until we see a live response
+    # Check for API-level errors first (HTTP 200 but response_code != 1 means failure)
+    response_code = result.get("response", {}).get("response_code")
+    if response_code != 1:
+        message = result.get("response", {}).get("message", "Unknown error")
+        print(f"\n⚠ API returned response_code={response_code}: {message}")
+        print("  Check the saved response file for details.")
+        return
+
+    # data can be null/None on failure — use (... or {}) to safely call .get()
+    data = result.get("response", {}).get("data") or {}
+
     launch_url = (
+        data.get("launch_url") or
+        data.get("url") or
         result.get("response", {}).get("launch_url") or
-        result.get("response", {}).get("url") or
-        result.get("response", {}).get("data", {}).get("url")
+        result.get("response", {}).get("url")
     )
 
     if launch_url:
         print(f"\n✓ Launch URL ready: {launch_url}")
         print("  → User clicks this link to schedule on ProctorU's site.")
     else:
-        print("\n⚠ No launch URL found yet — check the saved response file.")
-        print("  Once we see the live response shape, we'll lock in the key name.")
+        print("\n⚠ No launch URL found — check the saved response file for the full payload.")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -178,7 +188,7 @@ def main():
         "first_name":    "Jane",
         "last_name":     "Does",
         "email":         "indijones12@yopmail.com",
-        "user_password": "9ea342d9e48b",
+        "user_password": "9ea342D9e48b",            # Must have uppercase + lowercase + digit
         "time_zone_id":  "America/Chicago",       # IANA format — we convert as needed
 
         # Address fields — will come from CMS user profile later
