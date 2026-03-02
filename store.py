@@ -67,11 +67,34 @@ def get_reservation_by_no(reservation_no) -> dict | None:
     return None
 
 
+def get_reservation_by_student_exam(student_id: str, exam_id: str) -> dict | None:
+    """
+    Look up a reservation by student_id + exam_id.
+    Used by the webhook handler to match incoming ProctorU events
+    to our local records for the vendor_interface flow.
+    Returns the most recent matching record.
+    """
+    matches = [
+        r for r in _load_all()
+        if r.get("student_id") == student_id and r.get("exam_id") == exam_id
+    ]
+    return matches[-1] if matches else None
+
+
 def update_reservation_status(reservation_no, new_status: str):
     """
     Update the status of a reservation by reservation_no.
-    Statuses: 'booked' | 'cancelled' | 'rescheduled'
-    Used in Phase 5 when cancel/reschedule APIs are added.
+
+    Valid statuses:
+      'pending_scheduling' → vendor_interface: URL sent, user hasn't scheduled on ProctorU yet
+      'booked'             → direct_booking: confirmed immediately via API
+      'scheduled'          → vendor_interface: webhook received, user completed scheduling
+      'cancelled'          → either flow: cancelled via API (Phase 5)
+      'rescheduled'        → either flow: moved to new slot (Phase 5)
+
+    Called by:
+      - webhook_handler.py when ProctorU fires a scheduling confirmation (vendor_interface)
+      - cancel/reschedule flows (Phase 5)
     """
     records = _load_all()
     updated = False

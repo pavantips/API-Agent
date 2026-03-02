@@ -64,14 +64,16 @@ def vendor_interface_flow(user: dict, exam: dict):
         print(f"\n✓ Launch URL ready: {launch_url}")
         print("  → User clicks this link to schedule on ProctorU's site.")
 
-        # Persist to store — no reservation_no yet (user picks slot on ProctorU's site)
+        # Persist to store — status is "pending_scheduling" because the user still needs
+        # to click this URL and complete scheduling on ProctorU's site.
+        # Status will be updated to "scheduled" when we receive the ProctorU webhook.
         save_reservation({
             "student_id":       user["student_id"],
             "exam_id":          exam["exam_id"],
             "exam_description": exam["description"],
             "modality":         "vendor_interface",
             "launch_url":       launch_url,
-            "status":           "booked"
+            "status":           "pending_scheduling"
         })
     else:
         print("\n⚠ No launch URL found — check the saved response file for the full payload.")
