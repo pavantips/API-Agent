@@ -1,0 +1,17 @@
+# Never bake secrets into the image
+.env
+
+# Runtime output dirs — created fresh inside container
+data/
+responses/
+
+# Git and editor noise
+.git/
+.gitignore
+.claude/
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
