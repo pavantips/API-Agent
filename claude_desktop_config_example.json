@@ -1,0 +1,24 @@
+{
+  "_comment": "Add the 'mcpServers' block below into your Claude Desktop config file.",
+  "_config_file_locations": {
+    "macOS":   "~/Library/Application Support/Claude/claude_desktop_config.json",
+    "Windows": "%APPDATA%\\Claude\\claude_desktop_config.json"
+  },
+  "_setup_steps": [
+    "1. pip install mcp requests python-dotenv",
+    "2. Copy mcp_server.py to your project",
+    "3. Set PROCTORU_AUTH_TOKEN in your environment or a .env file next to mcp_server.py",
+    "4. Add the snippet below to your Claude Desktop config (merge with existing JSON)",
+    "5. Restart Claude Desktop — the ProctorU tools appear automatically"
+  ],
+
+  "mcpServers": {
+    "proctoru": {
+      "command": "python3",
+      "args": ["/FULL/PATH/TO/mcp_server.py"],
+      "env": {
+        "PROCTORU_AUTH_TOKEN": "your_proctoru_auth_token_here"
+      }
+    }
+  }
+}

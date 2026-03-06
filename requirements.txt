@@ -3,3 +3,4 @@ python-dotenv
 python-dateutil
 anthropic
 flask
+mcp
